@@ -9,22 +9,22 @@ public class HeadMovement : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     [SerializeField] SpriteController headSpriteController;
-
-    //PlayerAnimation anim;
+    [SerializeField] BodyMovement body;
 
     Vector2 moveInput;
-    bool isMoving;
-
     HashSet<float> validInput = new() { 0, 1, -1 };
 
-    //FacingDirection facingDirection;
-    //FacingDirection previousFacingDirection;
+    Axis currentAxis;
+    Axis previousAxis;
 
     bool isTimerOn;
     float timer;
 
     void Start()
     {
+        Axis currentAxis = Axis.Horizontal;
+        Axis previousAxis = currentAxis;
+        
         isTimerOn = true;    
     }
 
@@ -38,11 +38,9 @@ public class HeadMovement : MonoBehaviour
     {
         if (!isTimerOn)
         {
+            body.MoveBody();
             MoveToMovePoint();
         }
-
-        //ChangeFacePointPosition(moveInput);
-        //SetFacingDirection();
     }
 
     void OnMove(InputValue value)
@@ -52,12 +50,17 @@ public class HeadMovement : MonoBehaviour
             if (validInput.Contains(value.Get<Vector2>().x) && validInput.Contains(value.Get<Vector2>().y))
             {
                 moveInput = value.Get<Vector2>();
+                
+                SetAxis(moveInput);
 
-                if (moveInput.x != 0 || moveInput.y != 0)
+                if (currentAxis != previousAxis)
                 {
-                    ChangeMovePointPosition(moveInput);
-                    headSpriteController.TurnSprite(moveInput);
-                }               
+                    if (moveInput.x != 0 || moveInput.y != 0)
+                    {
+                        ChangeMovePointPosition(moveInput);
+                        headSpriteController.TurnSprite(moveInput);
+                    }
+                }            
             }
         }
     }
@@ -71,6 +74,20 @@ public class HeadMovement : MonoBehaviour
     void ChangeMovePointPosition(Vector2 moveInput)
     {
         movePoint.position = transform.position + new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
+    }
+
+    void SetAxis(Vector2 moveInput)
+    {
+        previousAxis = currentAxis;
+
+        if (moveInput.x != 0)
+        {
+            currentAxis = Axis.Horizontal;
+        }
+        else if (moveInput.y != 0)
+        {
+            currentAxis = Axis.Vertical;
+        }
     }
 
     void Timer()

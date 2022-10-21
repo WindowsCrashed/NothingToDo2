@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class BodyMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Transform movePoint;
+    [SerializeField] Transform snake;
+
+    Transform parentTransform;
+
+    void Awake()
     {
-        
+        parentTransform = transform.parent.transform;
+        transform.SetParent(snake);
     }
 
-    // Update is called once per frame
-    void Update()
+    void MoveToMovePoint()
     {
+        transform.position = movePoint.position;
+    }
+
+    void ChangeMovePointPosition()
+    {
+        movePoint.position = parentTransform.position;
+    }
+
+    public void MoveBody()
+    {
+        ChangeMovePointPosition();
+        MoveToMovePoint();
         
     }
 }
