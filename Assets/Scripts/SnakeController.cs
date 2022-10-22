@@ -46,25 +46,6 @@ public class SnakeController : MonoBehaviour
         }
     }
 
-    void SpawnBodyPart()
-    {
-        ISnake spawnParent;
-
-        if (bodyParts == null || bodyParts.Count == 0)
-        {
-            spawnParent = head;
-        } else
-        {
-            spawnParent = bodyParts.Last.Value;
-        }
-
-        BodyMovement newBodyPart = Instantiate(bodyPart,
-            spawnParent.GetSpawnPoint().position, spawnParent.GetTransform().rotation);
-        newBodyPart.SetParentTransform(spawnParent.GetTransform());
-        newBodyPart.gameObject.transform.SetParent(transform);
-        bodyParts.AddLast(newBodyPart);
-    }
-
     void Timer()
     {
         if (IsTimerOn)
@@ -77,5 +58,25 @@ public class SnakeController : MonoBehaviour
                 timer = 0;
             }
         }
+    }
+
+    public void SpawnBodyPart()
+    {
+        ISnake spawnParent;
+
+        if (bodyParts == null || bodyParts.Count == 0)
+        {
+            spawnParent = head;
+        }
+        else
+        {
+            spawnParent = bodyParts.Last.Value;
+        }
+
+        BodyMovement newBodyPart = Instantiate(bodyPart,
+            spawnParent.GetSpawnPoint().position, spawnParent.GetTransform().rotation);
+        newBodyPart.SetParentTransform(spawnParent.GetTransform());
+        newBodyPart.gameObject.transform.SetParent(transform);
+        bodyParts.AddLast(newBodyPart);
     }
 }

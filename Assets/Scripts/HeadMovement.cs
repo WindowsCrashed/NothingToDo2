@@ -7,6 +7,7 @@ public class HeadMovement : MonoBehaviour, ISnake
     [SerializeField] Transform movePoint;
     [SerializeField] Transform spawnPoint;
 
+    [SerializeField] SnakeController snake;
     [SerializeField] SpriteController headSpriteController;
 
     Vector2 moveInput;
@@ -15,13 +16,6 @@ public class HeadMovement : MonoBehaviour, ISnake
     Axis previousAxis;
 
     bool hasPressedKey;
-
-    SnakeController snake;
-
-    void Awake()
-    {
-        snake = GetComponentInParent<SnakeController>();
-    }
 
     void Start()
     {
@@ -32,6 +26,15 @@ public class HeadMovement : MonoBehaviour, ISnake
     void Update()
     {
         Move();
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Target"))
+        {
+            snake.SpawnBodyPart();
+            Destroy(collision.gameObject);
+        }
     }
 
     void Move()
