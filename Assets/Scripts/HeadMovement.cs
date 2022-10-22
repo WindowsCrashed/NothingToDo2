@@ -3,49 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class HeadMovement : MonoBehaviour
+public class HeadMovement : MonoBehaviour, ISnake
 {
     [SerializeField] Transform movePoint;
-    [SerializeField] float moveSpeed;
+    [SerializeField] Transform backPoint;
 
     [SerializeField] SpriteController headSpriteController;
     [SerializeField] BodyMovement body;
 
     Vector2 moveInput;
-    HashSet<float> validInput = new() { 0, 1, -1 };
+    readonly HashSet<float> validInput = new() { 0, 1, -1 };
 
     Axis currentAxis;
     Axis previousAxis;
 
-    bool isTimerOn;
-    float timer;
+    bool hasPressedKey;
+
+    SnakeController snake;
+
+    void Awake()
+    {
+        snake = GetComponentInParent<SnakeController>();
+    }
 
     void Start()
     {
         Axis currentAxis = Axis.Horizontal;
-        Axis previousAxis = currentAxis;
-        
-        isTimerOn = true;    
+        Axis previousAxis = currentAxis;          
     }
 
     void Update()
     {
-        Timer();
-        MoveHead();
-    }
-
-    void MoveHead()
-    {
-        if (!isTimerOn)
-        {
-            body.MoveBody();
-            MoveToMovePoint();
-        }
+        //MoveHead();
     }
 
     void OnMove(InputValue value)
     {
-        if (isTimerOn)
+        if (snake.IsTimerOn && !hasPressedKey)
         {
             if (validInput.Contains(value.Get<Vector2>().x) && validInput.Contains(value.Get<Vector2>().y))
             {
@@ -57,6 +51,7 @@ public class HeadMovement : MonoBehaviour
                 {
                     if (moveInput.x != 0 || moveInput.y != 0)
                     {
+                        hasPressedKey = true;
                         ChangeMovePointPosition(moveInput);
                         headSpriteController.TurnSprite(moveInput);
                     }
@@ -68,12 +63,17 @@ public class HeadMovement : MonoBehaviour
     void MoveToMovePoint()
     {
         transform.position = movePoint.position;
-        isTimerOn = true;
     }
 
     void ChangeMovePointPosition(Vector2 moveInput)
     {
         movePoint.position = transform.position + new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
+        ChangeBackPointPosition(moveInput);
+    }
+
+    void ChangeBackPointPosition(Vector2 moveInput)
+    {
+        backPoint.position = transform.position - new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
     }
 
     void SetAxis(Vector2 moveInput)
@@ -90,17 +90,14 @@ public class HeadMovement : MonoBehaviour
         }
     }
 
-    void Timer()
+    public void MoveHead()
     {
-        if (isTimerOn)
-        {
-            timer += Time.deltaTime;
+        MoveToMovePoint();
+        hasPressedKey = false;
+    }
 
-            if (timer >= (10 / moveSpeed))
-            {
-                isTimerOn = false;
-                timer = 0;
-            }
-        }
+    public Transform GetBackPoint()
+    {
+        return backPoint;
     }
 }
