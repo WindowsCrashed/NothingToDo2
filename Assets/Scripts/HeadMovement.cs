@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class HeadMovement : MonoBehaviour, ISnake
 {
@@ -11,7 +10,6 @@ public class HeadMovement : MonoBehaviour, ISnake
     [SerializeField] SpriteController headSpriteController;
 
     Vector2 moveInput;
-    readonly HashSet<float> validInput = new() { 0, 1, -1 };
 
     Axis currentAxis;
     Axis previousAxis;
@@ -20,8 +18,6 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     SnakeController snake;
 
-    public Transform SpawnPoint => spawnPoint;
-
     void Awake()
     {
         snake = GetComponentInParent<SnakeController>();
@@ -29,52 +25,93 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     void Start()
     {
-        Axis currentAxis = Axis.Horizontal;
-        Axis previousAxis = currentAxis;          
+        currentAxis = Axis.Horizontal;
+        previousAxis = currentAxis;          
     }
 
     void Update()
     {
-        //MoveHead();
+        Move();
     }
 
-    void OnMove(InputValue value)
+    void Move()
     {
         if (snake.IsTimerOn && !hasPressedKey)
         {
-            if (validInput.Contains(value.Get<Vector2>().x) && validInput.Contains(value.Get<Vector2>().y))
-            {
-                moveInput = value.Get<Vector2>();
-                
-                SetAxis(moveInput);
+            moveInput = DetectKey();        
 
+            if (moveInput.x != 0 || moveInput.y != 0)
+            {
+                SetAxis(moveInput);
+                
                 if (currentAxis != previousAxis)
-                {
-                    if (moveInput.x != 0 || moveInput.y != 0)
-                    {
-                        hasPressedKey = true;
-                        ChangeMovePointPosition(moveInput);
-                        headSpriteController.TurnSprite(moveInput);
-                    }
-                }            
+                {                   
+                    hasPressedKey = true;
+                    ChangeMovePointPosition(moveInput);
+                    headSpriteController.FlipSprite(moveInput);
+                }
             }
         }
     }
 
+    Vector2 DetectKey()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            return new Vector2(0, 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            return new Vector2(0, -1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            return new Vector2(-1, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            return new Vector2(1, 0);
+        }
+
+        return new Vector2(0, 0);
+    }
+
+    public Quaternion SetRotation(Vector2 input)
+    {
+        if (input.x == 1)
+        {
+            return Quaternion.Euler(0, 0, -180);
+        }
+        else if (input.y == -1)
+        {
+            return Quaternion.Euler(0, 0, 90);
+        }
+        else if (input.y == 1)
+        {
+            return Quaternion.Euler(0, 0, -90);
+        }
+        else if (input.x == -1)
+        {
+            return Quaternion.Euler(0, 0, 0);
+        }
+
+        return transform.rotation;
+    }
+    
     void MoveToMovePoint()
     {
-        transform.position = movePoint.position;
+        transform.SetPositionAndRotation(movePoint.position, SetRotation(moveInput));
+        ResetMovePoint();
     }
 
     void ChangeMovePointPosition(Vector2 moveInput)
     {
         movePoint.position = transform.position + new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
-        ChangeSpawnPointPosition(moveInput);
     }
 
-    void ChangeSpawnPointPosition(Vector2 moveInput)
+    void ResetMovePoint()
     {
-        spawnPoint.position = transform.position - new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
+        movePoint.localPosition = new Vector3(-1, 0, 0);
     }
 
     void SetAxis(Vector2 moveInput)

@@ -8,8 +8,8 @@ public class SnakeController : MonoBehaviour
     [SerializeField] BodyMovement bodyPart;
     [SerializeField] float moveSpeed;
 
-    //HashSet<BodyMovement> bodyParts;
-    [SerializeField] List<BodyMovement> bodyParts;
+    readonly LinkedList<BodyMovement> bodyParts = new();
+    //[SerializeField] List<BodyMovement> bodyParts;
 
     float timer;
 
@@ -17,13 +17,7 @@ public class SnakeController : MonoBehaviour
 
     void Awake()
     {
-        //bodyParts = new();
         IsTimerOn = true;       
-    }
-
-    void Start()
-    {
-        //bodyParts.Add(FindObjectOfType<BodyMovement>());
     }
 
     void Update()
@@ -61,13 +55,14 @@ public class SnakeController : MonoBehaviour
             spawnParent = head;
         } else
         {
-            spawnParent = bodyParts[^1];
+            spawnParent = bodyParts.Last.Value;
         }
 
-        BodyMovement newBodyPart = Instantiate(bodyPart, spawnParent.GetSpawnPoint().position, Quaternion.identity);
-        newBodyPart.SetParentPosition(spawnParent.GetTransform());
+        BodyMovement newBodyPart = Instantiate(bodyPart,
+            spawnParent.GetSpawnPoint().position, spawnParent.GetTransform().rotation);
+        newBodyPart.SetParentTransform(spawnParent.GetTransform());
         newBodyPart.gameObject.transform.SetParent(transform);
-        bodyParts.Add(newBodyPart);
+        bodyParts.AddLast(newBodyPart);
     }
 
     void Timer()

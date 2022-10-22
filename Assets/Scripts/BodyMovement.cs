@@ -4,53 +4,33 @@ using UnityEngine;
 
 public class BodyMovement : MonoBehaviour, ISnake
 {
-    [SerializeField] Transform movePoint;
     [SerializeField] Transform spawnPoint;
-    [SerializeField] Transform snake;
 
-    Transform parentBackPoint;
-    Transform parentTransform;
+    Vector3 parentShadowPosition;
+    Vector3 parentShadowRotation;
 
-    public Transform SpawnPoint => spawnPoint;
-    public Transform ParentPosition { get; private set; }
+    public Transform Parent { get; private set; }
 
-    void Awake()
+    void Start()
     {
-        //ISnake parentPart = (ISnake) transform.parent;
-        /*
-        if (transform.parent.TryGetComponent(out BodyMovement parent))
-        {
-            Transform parentBackPoint = parent.GetBackPoint();
-        } else if (transform.parent.TryGetComponent(out HeadMovement parentHead))
-        {
-            Transform parentBackPoint = parentHead.GetBackPoint();
-        }
-        */
-        //parentTransform = transform.parent.transform;
-
-        //transform.SetParent(snake);
+        SetShadow();
     }
 
-    void MoveToMovePoint()
+    void MoveToShadow()
     {
-        transform.position = movePoint.position;
+        transform.SetPositionAndRotation(parentShadowPosition, Quaternion.Euler(parentShadowRotation));
     }
 
-    void ChangeMovePointPosition()
+    void SetShadow()
     {
-        movePoint.position = ParentPosition.position;
-        ChangeSpawnPointPosition();
-    }
-
-    void ChangeSpawnPointPosition()
-    {
-        spawnPoint.position = transform.position - movePoint.localPosition;
+        parentShadowPosition = Parent.position;
+        parentShadowRotation = Parent.localEulerAngles;
     }
 
     public void MoveBody()
     {                      
-        MoveToMovePoint();
-        ChangeMovePointPosition();
+        MoveToShadow();
+        SetShadow();        
     }
 
     public Transform GetSpawnPoint()
@@ -63,8 +43,8 @@ public class BodyMovement : MonoBehaviour, ISnake
         return transform;
     }
 
-    public void SetParentPosition(Transform parent)
+    public void SetParentTransform(Transform parent)
     {
-        ParentPosition = parent;
+        Parent = parent;
     }
 }
