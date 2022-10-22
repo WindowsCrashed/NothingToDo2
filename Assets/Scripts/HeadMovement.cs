@@ -1,71 +1,107 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class HeadMovement : MonoBehaviour
+public class HeadMovement : MonoBehaviour, ISnake
 {
     [SerializeField] Transform movePoint;
-    [SerializeField] float moveSpeed;
+    [SerializeField] Transform spawnPoint;
 
     [SerializeField] SpriteController headSpriteController;
 
-    //PlayerAnimation anim;
-
     Vector2 moveInput;
-    bool isMoving;
 
-    HashSet<float> validInput = new() { 0, 1, -1 };
+    Axis currentAxis;
+    Axis previousAxis;
 
-    //FacingDirection facingDirection;
-    //FacingDirection previousFacingDirection;
+    bool hasPressedKey;
 
-    bool isTimerOn;
-    float timer;
+    SnakeController snake;
+
+    void Awake()
+    {
+        snake = GetComponentInParent<SnakeController>();
+    }
 
     void Start()
     {
-        isTimerOn = true;    
+        currentAxis = Axis.Horizontal;
+        previousAxis = currentAxis;          
     }
 
     void Update()
     {
-        Timer();
-        MoveHead();
+        Move();
     }
 
-    void MoveHead()
+    void Move()
     {
-        if (!isTimerOn)
+        if (snake.IsTimerOn && !hasPressedKey)
         {
-            MoveToMovePoint();
-        }
+            moveInput = DetectKey();        
 
-        //ChangeFacePointPosition(moveInput);
-        //SetFacingDirection();
-    }
-
-    void OnMove(InputValue value)
-    {
-        if (isTimerOn)
-        {
-            if (validInput.Contains(value.Get<Vector2>().x) && validInput.Contains(value.Get<Vector2>().y))
+            if (moveInput.x != 0 || moveInput.y != 0)
             {
-                moveInput = value.Get<Vector2>();
-
-                if (moveInput.x != 0 || moveInput.y != 0)
-                {
+                SetAxis(moveInput);
+                
+                if (currentAxis != previousAxis)
+                {                   
+                    hasPressedKey = true;
                     ChangeMovePointPosition(moveInput);
-                    headSpriteController.TurnSprite(moveInput);
-                }               
+                    headSpriteController.FlipSprite(moveInput);
+                }
             }
         }
     }
 
+    Vector2 DetectKey()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            return new Vector2(0, 1);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            return new Vector2(0, -1);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            return new Vector2(-1, 0);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            return new Vector2(1, 0);
+        }
+
+        return new Vector2(0, 0);
+    }
+
+    public Quaternion SetRotation(Vector2 input)
+    {
+        if (input.x == 1)
+        {
+            return Quaternion.Euler(0, 0, -180);
+        }
+        else if (input.y == -1)
+        {
+            return Quaternion.Euler(0, 0, 90);
+        }
+        else if (input.y == 1)
+        {
+            return Quaternion.Euler(0, 0, -90);
+        }
+        else if (input.x == -1)
+        {
+            return Quaternion.Euler(0, 0, 0);
+        }
+
+        return transform.rotation;
+    }
+    
     void MoveToMovePoint()
     {
-        transform.position = movePoint.position;
-        isTimerOn = true;
+        transform.SetPositionAndRotation(movePoint.position, SetRotation(moveInput));
+        ResetMovePoint();
     }
 
     void ChangeMovePointPosition(Vector2 moveInput)
@@ -73,17 +109,38 @@ public class HeadMovement : MonoBehaviour
         movePoint.position = transform.position + new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
     }
 
-    void Timer()
+    void ResetMovePoint()
     {
-        if (isTimerOn)
-        {
-            timer += Time.deltaTime;
+        movePoint.localPosition = new Vector3(-1, 0, 0);
+    }
 
-            if (timer >= (10 / moveSpeed))
-            {
-                isTimerOn = false;
-                timer = 0;
-            }
+    void SetAxis(Vector2 moveInput)
+    {
+        previousAxis = currentAxis;
+
+        if (moveInput.x != 0)
+        {
+            currentAxis = Axis.Horizontal;
         }
+        else if (moveInput.y != 0)
+        {
+            currentAxis = Axis.Vertical;
+        }
+    }
+
+    public void MoveHead()
+    {
+        MoveToMovePoint();
+        hasPressedKey = false;
+    }
+
+    public Transform GetSpawnPoint()
+    {
+        return spawnPoint;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }
