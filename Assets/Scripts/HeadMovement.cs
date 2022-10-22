@@ -17,6 +17,8 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     bool hasPressedKey;
 
+    public bool IsFacingObstacle { get; set; }
+
     void Start()
     {
         currentAxis = Axis.Horizontal;
@@ -30,7 +32,7 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Target"))
+        if (collision.IsTouchingLayers(LayerMask.GetMask("Head")) && collision.CompareTag("Target"))
         {
             snake.SpawnBodyPart();
             Destroy(collision.gameObject);

@@ -5,14 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Target
+  - Body
+  - Border
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - MovePoint
   - Water
   - UI
-  - 
+  - Head
   - 
   - 
   - 

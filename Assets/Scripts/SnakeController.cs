@@ -9,11 +9,10 @@ public class SnakeController : MonoBehaviour
     [SerializeField] float moveSpeed;
 
     readonly LinkedList<BodyMovement> bodyParts = new();
-    //[SerializeField] List<BodyMovement> bodyParts;
 
     float timer;
 
-    public bool IsTimerOn { get; private set; }
+    public bool IsTimerOn { get; private set; }   
 
     void Awake()
     {
@@ -32,6 +31,12 @@ public class SnakeController : MonoBehaviour
     {
         if (!IsTimerOn)
         {
+            if (head.IsFacingObstacle)
+            {
+                // Die
+                Destroy(gameObject);
+            }
+
             head.MoveHead();
             MoveBody();
             IsTimerOn = true;
