@@ -36,6 +36,7 @@ public class HeadMovement : MonoBehaviour, ISnake
         {
             snake.SpawnBodyPart();
             Destroy(collision.gameObject);
+            snake.SpawnTarget();
         }
     }
 

@@ -6,7 +6,8 @@ public class SnakeController : MonoBehaviour
 {
     [SerializeField] HeadMovement head;
     [SerializeField] BodyMovement bodyPart;
-    [SerializeField] float moveSpeed;
+    [SerializeField] SpawnerController spawn;
+    [SerializeField] float moveSpeed;    
 
     readonly LinkedList<BodyMovement> bodyParts = new();
 
@@ -19,9 +20,15 @@ public class SnakeController : MonoBehaviour
         IsTimerOn = true;       
     }
 
+    void Start()
+    {
+        SpawnTarget();  
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) SpawnBodyPart();
+        //if (Input.GetKeyDown(KeyCode.Z)) SpawnBodyPart();
+        //if (Input.GetKeyDown(KeyCode.Z)) spawn.SpawnAtRandomLocation();
 
         Timer();
         MoveSnake();
@@ -83,5 +90,10 @@ public class SnakeController : MonoBehaviour
         newBodyPart.SetParentTransform(spawnParent.GetTransform());
         newBodyPart.gameObject.transform.SetParent(transform);
         bodyParts.AddLast(newBodyPart);
+    }
+
+    public void SpawnTarget()
+    {
+        spawn.SpawnAtRandomLocation();
     }
 }
