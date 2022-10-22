@@ -5,6 +5,7 @@ using UnityEngine;
 public class SnakeController : MonoBehaviour
 {
     [SerializeField] HeadMovement head;
+    [SerializeField] BodyMovement bodyPart;
     [SerializeField] float moveSpeed;
 
     //HashSet<BodyMovement> bodyParts;
@@ -27,6 +28,8 @@ public class SnakeController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z)) SpawnBodyPart();
+
         Timer();
         MoveSnake();
     }
@@ -35,7 +38,6 @@ public class SnakeController : MonoBehaviour
     {
         if (!IsTimerOn)
         {
-            //MoveBodyMovePoints();
             head.MoveHead();
             MoveBody();
             IsTimerOn = true;
@@ -50,12 +52,22 @@ public class SnakeController : MonoBehaviour
         }
     }
 
-    void MoveBodyMovePoints()
+    void SpawnBodyPart()
     {
-        foreach (BodyMovement bodyPart in bodyParts)
+        ISnake spawnParent;
+
+        if (bodyParts == null || bodyParts.Count == 0)
         {
-            //bodyPart.ChangeMovePointPosition();
+            spawnParent = head;
+        } else
+        {
+            spawnParent = bodyParts[^1];
         }
+
+        BodyMovement newBodyPart = Instantiate(bodyPart, spawnParent.GetSpawnPoint().position, Quaternion.identity);
+        newBodyPart.SetParentPosition(spawnParent.GetTransform());
+        newBodyPart.gameObject.transform.SetParent(transform);
+        bodyParts.Add(newBodyPart);
     }
 
     void Timer()

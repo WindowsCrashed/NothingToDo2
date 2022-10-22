@@ -2,5 +2,6 @@ using UnityEngine;
 
 public interface ISnake
 {
-    public Transform GetBackPoint();
+    public Transform GetSpawnPoint();
+    public Transform GetTransform();
 }

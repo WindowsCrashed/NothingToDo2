@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2155012698822193656}
   m_Layer: 0
-  m_Name: BackPoint
+  m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePoint: {fileID: 8659932175100899513}
-  backPoint: {fileID: 2155012698822193656}
+  spawnPoint: {fileID: 2155012698822193656}
   headSpriteController: {fileID: 8659932174747526901}
   body: {fileID: 0}
 --- !u!1 &8659932174747526890

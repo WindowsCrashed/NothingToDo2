@@ -5,16 +5,19 @@ using UnityEngine;
 public class BodyMovement : MonoBehaviour, ISnake
 {
     [SerializeField] Transform movePoint;
-    [SerializeField] Transform backPoint;
+    [SerializeField] Transform spawnPoint;
     [SerializeField] Transform snake;
 
     Transform parentBackPoint;
     Transform parentTransform;
-    
+
+    public Transform SpawnPoint => spawnPoint;
+    public Transform ParentPosition { get; private set; }
+
     void Awake()
     {
         //ISnake parentPart = (ISnake) transform.parent;
-        
+        /*
         if (transform.parent.TryGetComponent(out BodyMovement parent))
         {
             Transform parentBackPoint = parent.GetBackPoint();
@@ -22,22 +25,26 @@ public class BodyMovement : MonoBehaviour, ISnake
         {
             Transform parentBackPoint = parentHead.GetBackPoint();
         }
-        
-        parentTransform = transform.parent.transform;
+        */
+        //parentTransform = transform.parent.transform;
 
-        transform.SetParent(snake);
+        //transform.SetParent(snake);
     }
 
     void MoveToMovePoint()
     {
-        Debug.Log(movePoint.position);
         transform.position = movePoint.position;
-        //transform.position = parentBackPoint.position;
     }
 
     void ChangeMovePointPosition()
     {
-        movePoint.position = parentTransform.position;
+        movePoint.position = ParentPosition.position;
+        ChangeSpawnPointPosition();
+    }
+
+    void ChangeSpawnPointPosition()
+    {
+        spawnPoint.position = transform.position - movePoint.localPosition;
     }
 
     public void MoveBody()
@@ -46,8 +53,18 @@ public class BodyMovement : MonoBehaviour, ISnake
         ChangeMovePointPosition();
     }
 
-    public Transform GetBackPoint()
+    public Transform GetSpawnPoint()
     {
-        return backPoint;
+        return spawnPoint;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public void SetParentPosition(Transform parent)
+    {
+        ParentPosition = parent;
     }
 }

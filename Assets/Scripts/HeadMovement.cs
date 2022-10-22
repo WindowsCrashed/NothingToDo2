@@ -6,10 +6,9 @@ using UnityEngine.InputSystem;
 public class HeadMovement : MonoBehaviour, ISnake
 {
     [SerializeField] Transform movePoint;
-    [SerializeField] Transform backPoint;
+    [SerializeField] Transform spawnPoint;
 
     [SerializeField] SpriteController headSpriteController;
-    [SerializeField] BodyMovement body;
 
     Vector2 moveInput;
     readonly HashSet<float> validInput = new() { 0, 1, -1 };
@@ -20,6 +19,8 @@ public class HeadMovement : MonoBehaviour, ISnake
     bool hasPressedKey;
 
     SnakeController snake;
+
+    public Transform SpawnPoint => spawnPoint;
 
     void Awake()
     {
@@ -68,12 +69,12 @@ public class HeadMovement : MonoBehaviour, ISnake
     void ChangeMovePointPosition(Vector2 moveInput)
     {
         movePoint.position = transform.position + new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
-        ChangeBackPointPosition(moveInput);
+        ChangeSpawnPointPosition(moveInput);
     }
 
-    void ChangeBackPointPosition(Vector2 moveInput)
+    void ChangeSpawnPointPosition(Vector2 moveInput)
     {
-        backPoint.position = transform.position - new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
+        spawnPoint.position = transform.position - new Vector3(moveInput.x, moveInput.y, movePoint.position.z);
     }
 
     void SetAxis(Vector2 moveInput)
@@ -96,8 +97,13 @@ public class HeadMovement : MonoBehaviour, ISnake
         hasPressedKey = false;
     }
 
-    public Transform GetBackPoint()
+    public Transform GetSpawnPoint()
     {
-        return backPoint;
+        return spawnPoint;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }

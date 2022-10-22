@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePoint: {fileID: 1138084319556198900}
-  backPoint: {fileID: 6949082328655787744}
+  spawnPoint: {fileID: 6949082328655787744}
   snake: {fileID: 0}
 --- !u!1 &8181196546245825094
 GameObject:
@@ -175,7 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6949082328655787744}
   m_Layer: 0
-  m_Name: BackPoint
+  m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
