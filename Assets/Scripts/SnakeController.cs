@@ -17,7 +17,7 @@ public class SnakeController : MonoBehaviour
 
     void Awake()
     {
-        IsTimerOn = true;       
+        IsTimerOn = true;
     }
 
     void Start()
@@ -27,9 +27,6 @@ public class SnakeController : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Z)) SpawnBodyPart();
-        //if (Input.GetKeyDown(KeyCode.Z)) spawn.SpawnAtRandomLocation();
-
         Timer();
         MoveSnake();
     }

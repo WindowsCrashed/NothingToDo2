@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HeadMovement : MonoBehaviour, ISnake
@@ -34,9 +32,7 @@ public class HeadMovement : MonoBehaviour, ISnake
     {
         if (collision.IsTouchingLayers(LayerMask.GetMask("Head")) && collision.CompareTag("Target"))
         {
-            snake.SpawnBodyPart();
-            Destroy(collision.gameObject);
-            snake.SpawnTarget();
+            Eat(collision);
         }
     }
 
@@ -54,10 +50,17 @@ public class HeadMovement : MonoBehaviour, ISnake
                 {                   
                     hasPressedKey = true;
                     ChangeMovePointPosition(moveInput);
-                    headSpriteController.FlipSprite(moveInput);
                 }
             }
         }
+    }
+
+    void Eat(Collider2D target)
+    {
+        snake.SpawnBodyPart();
+        Destroy(target.gameObject);
+        FindObjectOfType<ScoreKeeper>().IncreaseScore();
+        snake.SpawnTarget();
     }
 
     Vector2 DetectKey()
@@ -106,6 +109,11 @@ public class HeadMovement : MonoBehaviour, ISnake
     
     void MoveToMovePoint()
     {
+        if (hasPressedKey)
+        {
+            headSpriteController.FlipSprite(moveInput);
+        }
+        
         transform.SetPositionAndRotation(movePoint.position, SetRotation(moveInput));
         ResetMovePoint();
     }
