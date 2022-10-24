@@ -13,7 +13,6 @@ public class HeadMovement : MonoBehaviour, ISnake
     Vector2 moveInput;
 
     Axis currentAxis;
-    Axis previousAxis;
 
     bool hasPressedKey;
 
@@ -21,8 +20,7 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     void Start()
     {
-        currentAxis = Axis.Horizontal;
-        previousAxis = currentAxis;          
+        currentAxis = Axis.Horizontal;  
     }
 
     void Update()
@@ -46,13 +44,8 @@ public class HeadMovement : MonoBehaviour, ISnake
 
             if (moveInput.x != 0 || moveInput.y != 0)
             {
-                SetAxis(moveInput);
-
-                if (currentAxis != previousAxis)
-                {                   
-                    hasPressedKey = true;
-                    ChangeMovePointPosition(moveInput);
-                }
+                hasPressedKey = true;
+                ChangeMovePointPosition(moveInput);
             }
         }
     }
@@ -68,22 +61,31 @@ public class HeadMovement : MonoBehaviour, ISnake
     
     Vector2 DetectKey()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (currentAxis == Axis.Horizontal)
         {
-            return new Vector2(0, 1);
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                return new Vector2(0, 1);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                return new Vector2(0, -1);
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+
+        if (currentAxis == Axis.Vertical)
         {
-            return new Vector2(0, -1);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            return new Vector2(-1, 0);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            return new Vector2(1, 0);
-        }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                return new Vector2(-1, 0);
+            }
+            
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                return new Vector2(1, 0);
+            }
+        }  
 
         return new Vector2(0, 0);
     }
@@ -114,21 +116,28 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     public Quaternion SetRotation(Vector2 input)
     {
+        if (input.x == -1)
+        {
+            currentAxis = Axis.Horizontal;
+            return Quaternion.Euler(0, 0, 0);
+        }
+
         if (input.x == 1)
         {
+            currentAxis = Axis.Horizontal;
             return Quaternion.Euler(0, 0, -180);
         }
-        else if (input.y == -1)
+        
+        if (input.y == -1)
         {
+            currentAxis = Axis.Vertical;
             return Quaternion.Euler(0, 0, 90);
         }
-        else if (input.y == 1)
+        
+        if (input.y == 1)
         {
+            currentAxis = Axis.Vertical;
             return Quaternion.Euler(0, 0, -90);
-        }
-        else if (input.x == -1)
-        {
-            return Quaternion.Euler(0, 0, 0);
         }
 
         return transform.rotation;
@@ -153,20 +162,6 @@ public class HeadMovement : MonoBehaviour, ISnake
     void ResetMovePoint()
     {
         movePoint.localPosition = new Vector3(-1, 0, 0);
-    }
-
-    void SetAxis(Vector2 moveInput)
-    {
-        previousAxis = currentAxis;
-
-        if (moveInput.x != 0)
-        {
-            currentAxis = Axis.Horizontal;
-        }
-        else if (moveInput.y != 0)
-        {
-            currentAxis = Axis.Vertical;
-        }
     }
 
     public void MoveHead()
