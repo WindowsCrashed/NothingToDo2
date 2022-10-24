@@ -39,6 +39,7 @@ public class SnakeController : MonoBehaviour
             {
                 // Die
                 Destroy(gameObject);
+                FindObjectOfType<GameManager>().Die();
             }
 
             head.MoveHead();

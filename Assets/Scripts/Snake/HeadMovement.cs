@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HeadMovement : MonoBehaviour, ISnake
 {
@@ -7,6 +8,7 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     [SerializeField] SnakeController snake;
     [SerializeField] SpriteController headSpriteController;
+    [SerializeField] UIControls controls;
 
     Vector2 moveInput;
 
@@ -40,12 +42,12 @@ public class HeadMovement : MonoBehaviour, ISnake
     {
         if (snake.IsTimerOn && !hasPressedKey)
         {
-            moveInput = DetectKey();        
+            moveInput = DetectKey();
 
             if (moveInput.x != 0 || moveInput.y != 0)
             {
                 SetAxis(moveInput);
-                
+
                 if (currentAxis != previousAxis)
                 {                   
                     hasPressedKey = true;
@@ -63,6 +65,7 @@ public class HeadMovement : MonoBehaviour, ISnake
         snake.SpawnTarget();
     }
 
+    
     Vector2 DetectKey()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -84,6 +87,30 @@ public class HeadMovement : MonoBehaviour, ISnake
 
         return new Vector2(0, 0);
     }
+    
+    /*
+    Vector2 DetectKey()
+    {
+        if (controls.Key == KeyCode.UpArrow)
+        {
+            return new Vector2(0, 1);
+        }
+        else if (controls.Key == KeyCode.DownArrow)
+        {
+            return new Vector2(0, -1);
+        }
+        else if (controls.Key == KeyCode.LeftArrow)
+        {
+            return new Vector2(-1, 0);
+        }
+        else if (controls.Key == KeyCode.RightArrow)
+        {
+            return new Vector2(1, 0);
+        }
+
+        return new Vector2(0, 0);
+    }
+    */
 
     public Quaternion SetRotation(Vector2 input)
     {

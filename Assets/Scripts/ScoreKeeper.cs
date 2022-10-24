@@ -32,4 +32,17 @@ public class ScoreKeeper : MonoBehaviour
         Score += pointsPerTarget;
         Score = Mathf.Clamp(Score, 0, int.MaxValue);
     }
+
+    public void ResetScore()
+    {
+        Score = 0;
+    }
+
+    public void SetHighScore()
+    {
+        if (Score > HighScore)
+        {
+            HighScore = Score;
+        }
+    }
 }
