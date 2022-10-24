@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,9 +11,19 @@ public class GameManager : MonoBehaviour
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
     }
 
+    IEnumerator ProcessDeath()
+    {
+        HeadMovement head = FindObjectOfType<HeadMovement>();
+
+        yield return StartCoroutine(head.GetComponent<BlinkEffect>()
+            .Blink(head.GetComponentInChildren<SpriteRenderer>()));
+
+        LoadGameOver();
+    }
+
     public void Die()
     {
-        LoadGameOver();
+        StartCoroutine(ProcessDeath());
     }
 
     public void LoadMainMenu()

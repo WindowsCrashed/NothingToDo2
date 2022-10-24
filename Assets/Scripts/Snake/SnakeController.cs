@@ -12,6 +12,7 @@ public class SnakeController : MonoBehaviour
     readonly LinkedList<BodyMovement> bodyParts = new();
 
     float timer;
+    bool isAlive = true;
 
     public bool IsTimerOn { get; private set; }   
 
@@ -27,8 +28,11 @@ public class SnakeController : MonoBehaviour
 
     void Update()
     {
-        Timer();
-        MoveSnake();
+        if (isAlive)
+        {
+            Timer();
+            MoveSnake();
+        }       
     }
 
     void MoveSnake()
@@ -38,8 +42,9 @@ public class SnakeController : MonoBehaviour
             if (head.IsFacingObstacle)
             {
                 // Die
-                Destroy(gameObject);
-                FindObjectOfType<GameManager>().Die();
+                //Destroy(gameObject);
+                Die();
+                return;
             }
 
             head.MoveHead();
@@ -54,6 +59,13 @@ public class SnakeController : MonoBehaviour
         {
             bodyPart.MoveBody();
         }
+    }
+
+    void Die()
+    {
+        isAlive = false;
+        head.GetComponentInChildren<Animator>().enabled = false;
+        FindObjectOfType<GameManager>().Die();
     }
 
     void Timer()

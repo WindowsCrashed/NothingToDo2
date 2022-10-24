@@ -281,6 +281,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScoreKeeper
       objectReference: {fileID: 0}
+    - target: {fileID: 1717003466753350532, guid: d9678ed95726b4e4592a5c6186a30a63, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1717003466753350533, guid: d9678ed95726b4e4592a5c6186a30a63, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -667,6 +671,10 @@ PrefabInstance:
       propertyPath: controls
       value: 
       objectReference: {fileID: 1170573443}
+    - target: {fileID: 4366639767605013233, guid: d623ddf21ac48854f8e331d7ea1c3821, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4366639768345903034, guid: d623ddf21ac48854f8e331d7ea1c3821, type: 3}
       propertyPath: m_Name
       value: Snake
@@ -725,6 +733,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d623ddf21ac48854f8e331d7ea1c3821, type: 3}
+--- !u!1 &4366639766990387682 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4366639767261413678, guid: d623ddf21ac48854f8e331d7ea1c3821, type: 3}
+  m_PrefabInstance: {fileID: 4366639766990387681}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4366639766990387683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4366639766990387682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0129b6aed3e314468fccac0e78eda28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interval: 0.2
+  duration: 3
+  endless: 0
 --- !u!1001 &5815905203992111209
 PrefabInstance:
   m_ObjectHideFlags: 0

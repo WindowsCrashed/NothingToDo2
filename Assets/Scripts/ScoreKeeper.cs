@@ -6,6 +6,7 @@ public class ScoreKeeper : MonoBehaviour
 
     public int Score { get; private set; }
     public int HighScore { get; private set; }
+    public bool IsNewHighScore { get; private set; }
 
     void Awake()
     {
@@ -14,7 +15,7 @@ public class ScoreKeeper : MonoBehaviour
 
     void ManageSingleton()
     {
-        int instanceCount = FindObjectsOfType<ScoreKeeper>().Length;
+        int instanceCount = FindObjectsOfType(GetType()).Length;
 
         if (instanceCount > 1)
         {
@@ -43,6 +44,11 @@ public class ScoreKeeper : MonoBehaviour
         if (Score > HighScore)
         {
             HighScore = Score;
+            IsNewHighScore = true;
+        }
+        else
+        {
+            IsNewHighScore = false;
         }
     }
 }

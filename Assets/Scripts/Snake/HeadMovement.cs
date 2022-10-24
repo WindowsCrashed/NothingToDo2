@@ -25,7 +25,7 @@ public class HeadMovement : MonoBehaviour, ISnake
 
     void Update()
     {
-        Move();
+        SetMovingDirection();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -36,7 +36,7 @@ public class HeadMovement : MonoBehaviour, ISnake
         }
     }
 
-    void Move()
+    void SetMovingDirection()
     {
         if (snake.IsTimerOn && !hasPressedKey)
         {
