@@ -97,7 +97,7 @@ public class SnakeController : MonoBehaviour
 
         BodyMovement newBodyPart = Instantiate(bodyPart,
             spawnParent.GetSpawnPoint().position, spawnParent.GetTransform().rotation);
-        newBodyPart.SetParentTransform(spawnParent.GetTransform());
+        newBodyPart.SetReference(spawnParent.GetTransform());
         newBodyPart.gameObject.transform.SetParent(transform);
         bodyParts.AddLast(newBodyPart);
     }

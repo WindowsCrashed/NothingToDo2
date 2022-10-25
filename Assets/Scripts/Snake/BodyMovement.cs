@@ -4,10 +4,9 @@ public class BodyMovement : MonoBehaviour, ISnake
 {
     [SerializeField] Transform spawnPoint;
 
-    Vector3 parentShadowPosition;
-    Vector3 parentShadowRotation;
+    ShadowState shadow;
 
-    public Transform Parent { get; private set; }
+    public Transform Reference { get; private set; }
 
     void Start()
     {
@@ -16,13 +15,12 @@ public class BodyMovement : MonoBehaviour, ISnake
 
     void MoveToShadow()
     {
-        transform.SetPositionAndRotation(parentShadowPosition, Quaternion.Euler(parentShadowRotation));
+        transform.SetPositionAndRotation(shadow.Position, Quaternion.Euler(shadow.Rotation));
     }
 
     void SetShadow()
     {
-        parentShadowPosition = Parent.position;
-        parentShadowRotation = Parent.localEulerAngles;
+        shadow = new ShadowState(Reference);
     }
 
     public void MoveBody()
@@ -41,8 +39,8 @@ public class BodyMovement : MonoBehaviour, ISnake
         return transform;
     }
 
-    public void SetParentTransform(Transform parent)
+    public void SetReference(Transform reference)
     {
-        Parent = parent;
+        Reference = reference;
     }
 }
