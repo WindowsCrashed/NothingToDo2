@@ -55,6 +55,7 @@ public class HeadMovement : MonoBehaviour, ISnake
         snake.SpawnBodyPart();
         Destroy(target.gameObject);
         FindObjectOfType<ScoreKeeper>().IncreaseScore();
+        FindObjectOfType<AudioManager>().PlayClip("Pickup");
         snake.SpawnTarget();
     }
 

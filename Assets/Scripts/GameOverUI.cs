@@ -57,7 +57,7 @@ public class GameOverUI : MonoBehaviour
 
         if (scoreKeeper.IsNewHighScore)
         {
-            //audioManager.PlayClip("NewHighScore");
+            FindObjectOfType<AudioManager>().PlayClip("NewHighScore");
             yield return StartCoroutine(blinkEffect.Blink(highScoreText));
         }
 

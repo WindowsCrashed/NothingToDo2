@@ -65,6 +65,7 @@ public class SnakeController : MonoBehaviour
     {
         isAlive = false;
         head.GetComponentInChildren<Animator>().enabled = false;
+        FindObjectOfType<AudioManager>().PlayClip("Die");
         FindObjectOfType<GameManager>().Die();
     }
 

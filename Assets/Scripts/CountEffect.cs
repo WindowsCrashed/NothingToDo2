@@ -22,11 +22,11 @@ public class CountEffect : MonoBehaviour
     public IEnumerator CountUpEffect(TMP_Text text, int value)
     {
         int count = 0;
-        //AudioManager audioManager = FindObjectOfType<AudioManager>();
+        AudioManager audioManager = FindObjectOfType<AudioManager>();
 
         if (value != 0)
         {
-            //audioManager.PlayClip("Count");
+            audioManager.PlayClip("Count");
         }
 
         while (count <= value)
@@ -46,8 +46,8 @@ public class CountEffect : MonoBehaviour
 
         if (value != 0)
         {
-            //audioManager.StopClip("Count");
-            //audioManager.PlayClip("CountCoda");
+            audioManager.StopClip("Count");
+            audioManager.PlayClip("CountCoda");
         }
     }
 }
