@@ -29,7 +29,9 @@ public class MainMenuUI : MonoBehaviour
     void Start()
     {
         highScoreText.text = scoreKeeper.HighScore.ToString();
-        
+
+        FindObjectOfType<AudioManager>().PlayClip("Fugue");
+
         StartCoroutine(LoadMainMenu());
     }
 
